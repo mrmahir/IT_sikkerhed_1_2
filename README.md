@@ -3,7 +3,7 @@
 Dette er et **skoleprojekt** for Zealand, Næstved (IT-Sikkerhed).
 
 ## Om Projektet
-Her kan du beskrive hvad projektet går ud på. Husk at bruge **fed tekst** til vigtige ord for at opfylde opgavekravene.
+Under construction...
 
 ## Nyttige Links
 * [Zealand - Sjællands Erhvervsakademi](https://www.zealand.dk/)
