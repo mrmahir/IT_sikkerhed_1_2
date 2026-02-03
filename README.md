@@ -12,4 +12,4 @@ Her kan du beskrive hvad projektet går ud på. Husk at bruge **fed tekst** til 
 ## Billeder
 Herunder er et eksempel på hvordan man indsætter et billede i Markdown:
 
-![Zealand Logo](https://via.placeholder.com/600x200?text=Zealand+Naestved+IT-Sikkerhed)
+![Zealand Logo](https://upload.wikimedia.org/wikipedia/commons/e/e5/Zealand_logo.png)
