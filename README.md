@@ -1,33 +1,15 @@
-# Project Title (Overskrift)
+# IT-Sikkerhed Projekt
 
-Welcome to my project! This is a generic template designed to demonstrate **Markdown** formatting capabilities.
+Dette er et **skoleprojekt** for Zealand, Næstved (IT-Sikkerhed).
 
-## About the Project
-This section describes what the project is about. You can use **bold text** to highlight important keywords or features.
+## Om Projektet
+Her kan du beskrive hvad projektet går ud på. Husk at bruge **fed tekst** til vigtige ord for at opfylde opgavekravene.
 
-* Feature 1: Easy to use
-* Feature 2: Fast performance
-* Feature 3: **highly customizable**
+## Nyttige Links
+* [Zealand - Sjællands Erhvervsakademi](https://www.zealand.dk/)
+* [Markdown Guide](https://www.markdownguide.org/cheat-sheet/)
 
-## Visuals (Billeder)
-Here is an example of how to include an image in your Readme.
-*(Note: Replace the URL below with a link to your actual image)*
+## Billeder
+Herunder er et eksempel på hvordan man indsætter et billede i Markdown:
 
-![Alt text for image](https://via.placeholder.com/600x200?text=Project+Image+Here)
-
-## Installation & Usage
-To run this project, you can follow these steps:
-
-1.  Download the repository.
-2.  Open the terminal.
-3.  Run the command: `npm start` (example code)
-
-## Useful Links
-Here are some helpful resources used in this project:
-
-- [Markdown Cheat Sheet](https://www.markdownguide.org/cheat-sheet/) - Used for formatting guides.
-- [Google](https://www.google.com) - For general search.
-- [GitHub Documentation](https://docs.github.com/en)
-
----
-*Created by [Your Name]*
+![Zealand Logo](https://via.placeholder.com/600x200?text=Zealand+Naestved+IT-Sikkerhed)
