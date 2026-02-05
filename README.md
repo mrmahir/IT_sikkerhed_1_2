@@ -70,6 +70,11 @@ Hvor i mit workflow ville jeg lægge disse tests?
 
 ### 2.8 Screenshots
 
+## Auth Test 1
 ![alt text](image-3.png)
 
+## Auth Test 2
 ![alt text](image-2.png)
+
+## CRUD Tests
+![alt text](image-4.png)
