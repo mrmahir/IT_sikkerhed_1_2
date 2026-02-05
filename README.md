@@ -15,59 +15,58 @@ Under construction...
 ## 1.1 my own pytest
 ![alt text](image-1.png)
 
-## 2.0 Test Strategies Assignment
-**Topic:** Secure User Authentication & Password Policy
+## 2.0 Test Strategier (Opgave)
+**Emne:** Login-system & Password regler
 
-### 2.1 Equivalence Classes (Ækvivalensklasser)
-We divide input data for password validation into classes that should be treated similarly.
-* **Class 1 (Valid):** String length 8-64 characters, contains 1 special char, 1 digit.
-* **Class 2 (Invalid):** String length < 8 characters.
-* **Class 3 (Invalid):** String length > 64 characters.
-* **Class 4 (Invalid):** Missing special character or digit.
+### 2.1 Ækvivalensklasser
+Jeg deler input op i grupper, som systemet bør håndtere på samme måde.
+* **Gyldig:** Password på 8-64 tegn, som indeholder tal og specialtegn.
+* **Ugyldig:** Password på under 8 tegn.
+* **Ugyldig:** Password på over 64 tegn.
+* **Ugyldig:** Mangler specialtegn eller tal.
 
-### 2.2 Boundary Value Test (Grænseværditest)
-We test the edges of the equivalence classes (specifically length requirements).
-* **Test 7 chars:** Fail (Just below boundary)
-* **Test 8 chars:** Pass (On boundary)
-* **Test 64 chars:** Pass (On boundary)
-* **Test 65 chars:** Fail (Just above boundary)
+### 2.2 Grænseværditest
+Her tester jeg lige præcis der, hvor koden skifter fra "godkendt" til "afvist" (længden på passwordet).
+* **7 tegn:** Fejler (Lige under grænsen)
+* **8 tegn:** Godkendes (På grænsen)
+* **64 tegn:** Godkendes (På grænsen)
+* **65 tegn:** Fejler (Lige over grænsen)
 
 ### 2.3 CRUD(L)
-Mapping the Create, Read, Update, Delete, List operations to the Security Context:
-* **C:** Register new user (hashing password).
-* **R:** Login / Validate credentials (verify hash).
-* **U:** Change password / Update profile 2FA settings.
-* **D:** Delete account (GDPR compliance).
-* **L:** List active sessions (for detecting suspicious activity).
+Hvordan de klassiske operationer ser ud i mit sikkerheds-emne:
+* **C (Create):** Opret ny bruger (her skal password hashes før det gemmes).
+* **R (Read):** Log ind (systemet tjekker om input matcher det gemte hash).
+* **U (Update):** Skift password eller opdater profil.
+* **D (Delete):** Slet bruger (sletning af data fra databasen).
+* **L (List):** Vis log-filer over login-forsøg (for at spotte angreb).
 
 ### 2.4 Cycle Process Test
-Testing the lifecycle of a user's security status:
-1.  **State:** Account Active.
-2.  **Action:** 3 Failed Login Attempts -> **State:** Account Locked.
-3.  **Action:** Admin Unlock / Time expires -> **State:** Account Active.
-4.  **Action:** Password Expired -> **State:** Awaiting Change.
+En test af "livscyklussen" for en brugerkonto:
+1.  **Status:** Konto er aktiv.
+2.  **Handling:** 3 forkerte login forsøg -> **Status:** Konto låses.
+3.  **Handling:** Admin låser op -> **Status:** Konto er aktiv igen.
+4.  **Handling:** Password udløber -> **Status:** Afventer nyt password.
 
-### 2.5 Test Pyramid (Test Pyramiden)
-Where these tests belong in the hierarchy:
-* **Unit Tests (Base):** Decision table for login logic, Password complexity regex checks. (Fast, isolated).
-* **Integration Tests (Middle):** Testing the "Create User" flow ensuring the database correctly stores the salted hash.
-* **UI/E2E Tests (Top):** Selenium/Playwright script actually opening the browser and logging in.
+### 2.5 Test Pyramiden
+Hvor mine tests hører hjemme:
+* **Unit Tests (Bunden):** Min PyTest kode. Tjekker logikken (fx "er password langt nok?"). Det går hurtigt.
+* **Integration Tests (Midten):** Tjekker om "Opret Bruger" faktisk gemmer det rigtigt i databasen.
+* **UI/E2E Tests (Toppen):** En test der åbner en browser og klikker "Log ind" som en rigtig bruger.
 
 ### 2.6 Decision Table Test
-Logic for `login(username, password)`:
+Logikken for min login-funktion testet i et skema:
 
-| Rule | User Exists? | Account Locked? | Password Correct? | Expected Result |
-| :--- | :----------- | :-------------- | :---------------- | :-------------- |
-| 1    | False        | -               | -                 | Error: Invalid User |
-| 2    | True         | True            | -                 | Error: Locked |
-| 3    | True         | False           | False             | Error: Invalid Password |
-| 4    | True         | False           | True              | Success |
+| Regel | Findes bruger? | Er konto låst? | Rigtigt password? | Forventet Resultat |
+| :--- | :--- | :--- | :--- | :--- |
+| 1 | Nej | - | - | Fejl: Ukendt bruger |
+| 2 | Ja | Ja | - | Fejl: Konto låst |
+| 3 | Ja | Nej | Nej | Fejl: Forkert kode |
+| 4 | Ja | Nej | Ja | Succes: Logget ind |
 
 ### 2.7 Security Gates
-Where in the CI/CD pipeline would I place these tests?
-* **Commit Gate / Pull Request:** Run **Unit Tests** (Equivalence, Boundary, Decision Table). These must pass before code is merged.
-* **Acceptance Test Gate:** Run **CRUD(L) Integration Tests** against a staging database.
-* **Deployment Gate:** Run **Cycle Process** and E2E tests to ensure critical flows work in the final environment.
+Hvor i mit workflow ville jeg lægge disse tests?
+* **Pull Request (Før koden godkendes):** Her køres **Unit Tests** (min PyTest). Hvis de fejler, må koden ikke komme videre.
+* **Deployment (Før det går live):** Her køres de tungere tests, som sikrer at databasen og hele flowet virker sammen.
 
 ### 2.8 Screenshots
 
