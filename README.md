@@ -3,11 +3,24 @@
 Dette er et **skoleprojekt** for Zealand, Næstved (IT-Sikkerhed).
 
 ## Om Projektet
-Under construction...
+Dette projekt demonstrerer udviklingen af en sikker backend-prototype med fokus på Security by Design og GDPR-compliance.
+
+Formålet er at bygge en brugerdatabase fra bunden (uden brug af færdige frameworks), for at vise en dybdegående forståelse af, hvordan data beskyttes "under motorhjelmen".
+
+Projektets kernepunkter:
+
+Secure Coding: Implementering af AES-kryptering til beskyttelse af persondata (PII) og PBKDF2 med salt til sikker password-hashing.
+
+Test-Driven Development (TDD): Omfattende brug af pytest til at sikre kodekvalitet gennem unit-tests, grænseværdianalyser og beslutningstabeller.
+
+Arkitektur: Opbygning af en custom flat_file_db (JSON) med fuld CRUD-funktionalitet og indbygget sikkerhedslag.
+
+Quality Assurance: Anvendelse af BDD-principper (Given-When-Then) og risikoanalyse i testdesignet.
+
+Dette repository fungerer som et "Proof of Concept" på, hvordan man sikrer dataintegritet og fortrolighed i et moderne udviklingsmiljø.
 
 ## Nyttige Links
 * [Zealand - Sjællands Erhvervsakademi](https://www.zealand.dk/)
-* [Markdown Guide](https://www.markdownguide.org/cheat-sheet/)
 
 ## 1.0 pytest
 ![alt text](image.png)
@@ -89,6 +102,20 @@ BDD Struktur: Jeg bruger kommentarerne Given (før-situation), When (handling) o
 Risikovurdering: Hver test har en kommentar om Risikoen, hvis testen fejler (fx "Admin kan ikke låse brugere").
 
 ### NOTE til 3 (DB TEST), risikoen for hvad der sker er skrevet ind i selve unit testene. 
+
+## 4.0 Kryptering & Hashing (GDPR)
+
+### 4.1 Valg af Algoritmer
+* **Kryptering (Data):** AES (Fernet). Valgt fordi det er industristandard for at beskytte data på disk.
+* **Hashing (Passwords):** PBKDF2-HMAC-SHA256 med Salt. Valgt fordi det er langsomt ("Key Stretching"), hvilket stopper brute-force og rainbow-table angreb.
+
+### 4.2 Data Workflow
+* **Kryptering:** Sker straks i koden (`add_secure_user`) før lagring. Data lander aldrig i klartekst på harddisken.
+* **Dekryptering:** Sker kun midlertidigt i RAM, når systemet skal vise data (`get_decrypted_user`).
+* **Sletning fra RAM:** Jeg bruger `del user_input` i koden for at fjerne passwords fra hukommelsen straks efter hashing.
+
+### 4.3 Vigtigt Hensyn
+* **Key Management:** Hele systemets sikkerhed ligger i `secret.key`. Mister man filen, er data tabt. Den må aldrig lægges på GitHub.
 
 ### Screenshots
 
