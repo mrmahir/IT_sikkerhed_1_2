@@ -9,7 +9,7 @@ class SecurityManager:
         self.cipher = Fernet(self.key)
 
     def _load_or_generate_key(self):
-        """Loader eksisterende nøgle eller laver en ny."""
+        """Load existing key or generate a new one."""
         if os.path.exists(self.key_file):
             with open(self.key_file, 'rb') as f:
                 return f.read()
@@ -20,13 +20,13 @@ class SecurityManager:
             return key
 
     def encrypt_data(self, plain_text):
-        """Krypterer personlig data (til GDPR)."""
+        """Encrypts personal data (for GDPR)."""
         if not plain_text: return ""
-        # Fernet kræver bytes, så vi encoder
+        # Fernet requires bytes, so we encode
         return self.cipher.encrypt(plain_text.encode()).decode()
 
     def decrypt_data(self, encrypted_text):
-        """Dekrypterer data når systemet skal bruge det."""
+        """Decrypts data when the system needs to use it."""
         try:
             return self.cipher.decrypt(encrypted_text.encode()).decode()
         except Exception:
@@ -34,21 +34,21 @@ class SecurityManager:
 
     def hash_password(self, password):
         """
-        Hasher password med salt. 
-        Vi bruger PBKDF2-HMAC-SHA256 som er NIST anbefalet.
+        Hash password with salt.
+        We use PBKDF2-HMAC-SHA256 which is NIST recommended.
         """
-        salt = os.urandom(16) # Tilfældig salt
-        # 100.000 iterationer gør det langsomt for hackere at brute-force
+        salt = os.urandom(16) # Random salt
+        # 100,000 iterations make it slow for hackers to brute-force
         pwd_hash = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 100_000)
-        # Gemmer salt + hash sammen (hex format)
+        # Store salt + hash together (hex format)
         return salt.hex() + ":" + pwd_hash.hex()
 
     def verify_password(self, stored_password, provided_password):
-        """Tjekker om et password matcher hashen."""
+        """Checks if a password matches the hash."""
         try:
             salt_hex, hash_hex = stored_password.split(':')
             salt = bytes.fromhex(salt_hex)
-            # Vi hasher det indtastede password med SAMME salt
+            # We hash the provided password with the SAME salt
             new_hash = hashlib.pbkdf2_hmac('sha256', provided_password.encode(), salt, 100_000)
             return new_hash.hex() == hash_hex
         except ValueError:
