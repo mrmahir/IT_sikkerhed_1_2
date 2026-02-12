@@ -103,3 +103,6 @@ Risikovurdering: Hver test har en kommentar om Risikoen, hvis testen fejler (fx 
 
 ## 3. DB unit testing
 ![alt text](image-5.png)
+
+## 4. Security
+![alt text](image-6.png)
