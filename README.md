@@ -68,13 +68,38 @@ Hvor i mit workflow ville jeg lægge disse tests?
 * **Pull Request (Før koden godkendes):** Her køres **Unit Tests** (min PyTest). Hvis de fejler, må koden ikke komme videre.
 * **Deployment (Før det går live):** Her køres de tungere tests, som sikrer at databasen og hele flowet virker sammen.
 
-### 2.8 Screenshots
+## 3 DB Unit testing / flat_db_file
 
-## Auth Test 1
+### 3.1 Hvorfor Flat File DB?
+Jeg har valgt en flat_file_db (JSON) til denne opgave, fordi:
+
+Simpel opsætning: Kræver ingen server (som SQL/NoSQL), men kun en fil.
+
+Læsbarhed: Data gemmes i JSON, så det er nemt for mennesker at læse og debugge direkte i filen.
+
+Portabilitet: Databasen er blot en fil, der kan flyttes sammen med koden.
+
+### 3.2 Test Design
+Jeg har designet mine tests, så de dækker hele CRUD-livscyklussen (Create, Read, Update, Delete) for en bruger.
+
+Naming: Beskrivende testnavne (fx test_create_new_user_success).
+
+BDD Struktur: Jeg bruger kommentarerne Given (før-situation), When (handling) og Then (forventet resultat) i koden.
+
+Risikovurdering: Hver test har en kommentar om Risikoen, hvis testen fejler (fx "Admin kan ikke låse brugere").
+
+### NOTE til 3 (DB TEST), risikoen for hvad der sker er skrevet ind i selve unit testene. 
+
+### Screenshots
+
+## 1. Auth Test 1
 ![alt text](image-3.png)
 
-## Auth Test 2
+## 1. Auth Test 2
 ![alt text](image-2.png)
 
-## CRUD Tests
+## 2. CRUD Tests
 ![alt text](image-4.png)
+
+## 3. DB unit testing
+![alt text](image-5.png)
