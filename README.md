@@ -210,3 +210,4 @@ The above sections provide a consistent, shortened description in the same tone 
 ## 5. REST API
 ![alt text](image-7.png)
 
+![alt text](image-8.png)
