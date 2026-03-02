@@ -10,22 +10,17 @@ class TestFlatFileDB(unittest.TestCase):
         self.test_file = "test_db_temp.json"
         self.db = FlatFileDB(self.test_file)
         
-        # Seed initial data
-        initial_data = {
-            "userdb": [
-                {
-                    "person_id": "999",
-                    "first_name": "Test",
-                    "last_name": "User",
-                    "address": "Test Lane",
-                    "street_number": "1",
-                    "password": "hashed_test",
-                    "enabled": True
-                }
-            ]
+        # Seed initial data using the secure method
+        test_user = {
+            "person_id": "999",
+            "first_name": "Test",
+            "last_name": "User",
+            "address": "Test Lane",
+            "street_number": "1",
+            "email": "test@test.com",
+            "password": "TestPassword123!"
         }
-        with open(self.test_file, 'w') as f:
-            json.dump(initial_data, f)
+        self.db.add_secure_user(test_user)
 
     def tearDown(self):
         """Runs after every test. Cleans up the file."""
@@ -43,8 +38,8 @@ class TestFlatFileDB(unittest.TestCase):
             "last_name": "Wonder",
             "address": "Rabbit Hole",
             "street_number": "1",
-            "password": "hash_123",
-            "enabled": True
+            "email": "alice@wonderland.com",
+            "password": "AlicePassword123!"
         }
 
         # When: The create_user function is called

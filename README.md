@@ -117,6 +117,79 @@ Risk Assessment: Each test has a comment about the Risk if the test fails (e.g. 
 ### 4.3 Important Consideration
 * **Key Management:** The entire system's security lies in `secret.key`. If the file is lost, data is lost. It must never be uploaded to GitHub.
 
+## 5.0 Test Results
+
+All security-critical tests pass:
+* **Test Strategies:** 8 tests (Decision tables + Boundary values) 
+* **Database Operations:** 4 tests (CRUD cycle)
+* **Encryption & Hashing:** 3 tests (PII + Password verification)
+* **CRUD Demo:** 1 test
+
+**Total:** 16 PASSED | 4 Intentional Failures (test_examples.py) | 2 SKIPPED
+
+## 5.1 User Lifecycle
+
+1. **Create (Register):** User data encrypted, password hashed with salt, stored securely.
+2. **Read (Login/Profile):** Data decrypted temporarily in RAM, never exposed on disk.
+3. **Update (Lock account):** Status changed via `update_user_status()`.
+4. **Delete (GDPR Right to Forget):** Hard delete removes all records.
+
+## 5.2 Key Methods
+
+**Database:** `add_secure_user()`, `get_decrypted_user()`, `update_user_status()`, `delete_user()`, `change_password()`, `user_exists()`
+
+**Security:** `encrypt_data()`, `decrypt_data()`, `hash_password()`, `verify_password()`
+
+---
+
+# Assignment 2 – Authorization REST API
+This additional task builds on the existing code and adds a FastAPI server that issues JWT tokens.
+
+### Main requirements
+* Administration via token-based login (`/token`).
+* Automatic creation of a default admin if the database is empty (use `ADMIN_ID`, `ADMIN_PASS` in environment).
+* Only the admin can register new users.
+* Password-change endpoint for both the user themselves and the admin.
+* Users may deactivate their own account; only the admin can reactivate.
+* Server configuration (JWT secret, timeouts) is read from environment variables – no secrets in Git.
+
+### Endpoints (documented via `/docs`)
+* `POST /token` – login, form data.
+* `POST /users/register` – admin only, send new user JSON.
+* `POST /users/{id}/password` – self or admin may change password.
+* `POST /users/{id}/deactivate` – self deactivation.
+* `POST /users/{id}/activate` – admin reactivation.
+
+### Test strategy
+New test file `test_auth_api.py` covers:
+* Admin receives token, can create a new user.
+* User changes own password, old login fails.
+* User deactivates themselves and is locked out; admin reactivates.
+
+Environment setup is done via pytest fixture that patches `auth_api.db` to a temporary file and sets required variables.
+
+### Setup and running
+```bash
+# start server during development
+uvicorn auth_api:app --reload
+
+# variables (example in PowerShell)
+$env:JWT_SECRET="supersecret";
+$env:ADMIN_PASS="choose";
+$env:ADMIN_ID="admin";
+
+# test
+pytest -v test/test_auth_api.py
+```
+
+### Security lessons
+* JWT secret (minimum 32 bytes in production) in environment – never in repo.
+* `python-multipart`, `httpx` and `pyjwt` are used for forms, tests and token handling.
+* Access control implemented via FastAPI dependencies.
+
+The above sections provide a consistent, shortened description in the same tone as the rest of the README.  
+<hr>
+
 ### Screenshots
 
 ## 1. Auth Test 1
@@ -133,3 +206,7 @@ Risk Assessment: Each test has a comment about the Risk if the test fails (e.g. 
 
 ## 4. Security
 ![alt text](image-6.png)
+
+## 5. REST API
+![alt text](image-7.png)
+

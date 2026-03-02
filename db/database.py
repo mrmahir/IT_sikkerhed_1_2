@@ -101,3 +101,30 @@ class FlatFileDB:
             self._save_data(data)
             return True
         return False
+
+    def change_password(self, person_id, new_password):
+        """Update the user's password hash."""
+        data = self._load_data()
+        for user in data["userdb"]:
+            if user["person_id"] == person_id:
+                user["password"] = self.security.hash_password(new_password)
+                self._save_data(data)
+                return True
+        return False
+
+    def user_exists(self, person_id):
+        data = self._load_data()
+        return any(u for u in data["userdb"] if u["person_id"] == person_id)
+
+    # Compatibility methods for tests
+    def create_user(self, user_input):
+        """
+        Legacy method name. Maps to add_secure_user for compatibility.
+        """
+        return self.add_secure_user(user_input)
+
+    def get_user_by_id(self, person_id):
+        """
+        Legacy method name. Maps to get_decrypted_user for compatibility.
+        """
+        return self.get_decrypted_user(person_id)
